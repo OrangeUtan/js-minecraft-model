@@ -79,11 +79,7 @@ export class Face {
         public tintindex?: number,
     ) {}
 
-    static fromJson(json: unknown): Face | never {
-        if (!validateFaceJson(json)) {
-            throw Error()
-        }
-
+    static fromJson(json: FaceJson): Face {
         return new Face(
             json.texture,
             json.rotation ?? 0,

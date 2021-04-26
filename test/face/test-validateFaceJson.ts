@@ -1,22 +1,22 @@
 import test from 'ava'
 import { ModelValidationError } from '../../src/error'
-import { Face } from '../../src/face'
+import { validateFaceJson } from '../../src/face'
 
 test('valid', (t) => {
     t.true(
-        Face.fromJson({
+        validateFaceJson({
             texture: '#abc',
             uv: [1, 2, 3, 4],
             cullface: 'down',
             rotation: 90,
             tintindex: 12,
-        }) instanceof Face,
+        }),
     )
 })
 
 test('invalid type', (t) => {
     for (const it of [20, []] as unknown[]) {
-        t.throws(() => Face.fromJson(it), {
+        t.throws(() => validateFaceJson(it), {
             instanceOf: ModelValidationError,
             message: 'Invalid face: ' + JSON.stringify(it),
         })
@@ -27,7 +27,7 @@ test('invalid "texture"', (t) => {
     for (const texture of ['#', '', 'ab', 'abc'] as unknown[]) {
         t.throws(
             () =>
-                Face.fromJson({
+                validateFaceJson({
                     texture: texture,
                 }),
             {
@@ -41,7 +41,7 @@ test('invalid "texture"', (t) => {
 test('invalid "uv"', (t) => {
     t.throws(
         () =>
-            Face.fromJson({
+            validateFaceJson({
                 texture: '#stone',
                 uv: [1, 2, 3],
             }),
@@ -55,7 +55,7 @@ test('invalid "uv"', (t) => {
 test('invalid "cullface"', (t) => {
     t.throws(
         () =>
-            Face.fromJson({
+            validateFaceJson({
                 texture: '#stone',
                 cullface: 'nyet',
             }),
@@ -69,7 +69,7 @@ test('invalid "cullface"', (t) => {
 test('invalid "rotation"', (t) => {
     t.throws(
         () =>
-            Face.fromJson({
+            validateFaceJson({
                 texture: '#stone',
                 rotation: 91,
             }),
@@ -83,7 +83,7 @@ test('invalid "rotation"', (t) => {
 test('invalid "tintindex"', (t) => {
     t.throws(
         () =>
-            Face.fromJson({
+            validateFaceJson({
                 texture: '#stone',
                 tintindex: 'abc',
             }),
