@@ -1,0 +1,1 @@
+export { Vec3, Vec4, isVec3, isVec4 } from './vector';
