@@ -1,1 +1,6 @@
-export { Vec3, Vec4 } from './vector'
+export * from './model'
+export * from './element'
+export * from './face'
+export * from './display'
+export * from './vector'
+export * from './error'
