@@ -1,11 +1,14 @@
 {
-    "extends": [
-        "@ericcrosson/eslint-config"
-    ],
-    "parserOptions": {
-        "sourceType": "module",
-        "ecmaVersion": 2018,
-        "project": "./tsconfig.json"
-    },
-    "parser": "@typescript-eslint/parser"
+  "extends": [
+    "@ericcrosson/eslint-config"
+  ],
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2018,
+    "project": "./tsconfig.json"
+  },
+  "parser": "@typescript-eslint/parser",
+  "rules": {
+    "@typescript-eslint/explicit-module-boundary-types": 0
+  }
 }
