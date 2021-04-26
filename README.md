@@ -21,13 +21,4 @@ npm install @oran9e/minecraft-model
 
 ``` typescript
 import { minecraftModel } from '@oran9e/minecraft-model'
-// TODO: describe usage
 ```
-
-## Related
-
-TODO
-
-## Acknowledgments
-
-TODO
