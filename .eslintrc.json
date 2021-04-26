@@ -9,6 +9,7 @@
   },
   "parser": "@typescript-eslint/parser",
   "rules": {
-    "@typescript-eslint/explicit-module-boundary-types": 0
+    "@typescript-eslint/explicit-module-boundary-types": 0,
+    "security/detect-object-injection": 0
   }
 }
