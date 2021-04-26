@@ -1,7 +1,7 @@
 {
   "name": "@oran9e/minecraft-model",
   "version": "0.0.1",
-  "description": "Minecraft Model support for node",
+  "description": "Minecraft Model support for JavaScript",
   "keywords": [
     "minecraft,",
     "resourcepack,",
