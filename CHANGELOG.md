@@ -1,5 +1,12 @@
 Changelog
 
+## [1.0.1](https://github.com/OrangeUtan/node-minecraft-model/compare/v1.0.0...v1.0.1) (2021-04-26)
+
+
+### Bug Fixes
+
+* Missing exports in index.ts ([280df40](https://github.com/OrangeUtan/node-minecraft-model/commit/280df405835556c1cf3c71ff6fb7d91a7a7a2eda))
+
 # 1.0.0 (2021-04-26)
 
 
