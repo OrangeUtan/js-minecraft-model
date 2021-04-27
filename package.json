@@ -8,13 +8,13 @@
     "model,",
     "json"
   ],
-  "homepage": "https://github.com/OrangeUtan/node-minecraft-model",
+  "homepage": "https://github.com/OrangeUtan/js-minecraft-model",
   "bugs": {
-    "url": "https://github.com/OrangeUtan/node-minecraft-model/issues"
+    "url": "https://github.com/OrangeUtan/js-minecraft-model/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OrangeUtan/node-minecraft-model.git"
+    "url": "git+https://github.com/OrangeUtan/js-minecraft-model.git"
   },
   "license": "MIT",
   "author": "Oran9eUtan <Oran9eUtan@gmail.com>",
