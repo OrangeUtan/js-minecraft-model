@@ -1,5 +1,12 @@
 Changelog
 
+## [1.0.2](https://github.com/OrangeUtan/js-minecraft-model/compare/v1.0.1...v1.0.2) (2021-04-27)
+
+
+### Bug Fixes
+
+* Changed repo ([5231f8d](https://github.com/OrangeUtan/js-minecraft-model/commit/5231f8da05d680e3b1cc9766741525608f86f443))
+
 ## [1.0.1](https://github.com/OrangeUtan/node-minecraft-model/compare/v1.0.0...v1.0.1) (2021-04-26)
 
 
