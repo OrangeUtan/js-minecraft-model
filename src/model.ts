@@ -116,3 +116,40 @@ export class MinecraftModel {
         return this.elements != null && this.elements.length >= 1
     }
 }
+
+export function resolveModelHierarchy(root: MinecraftModelJson, ancestors: {[assetPath: string]: MinecraftModelJson}) {
+    const hierarchy = [root];
+    let current = ancestors[root.parent!];
+    while(current != null) {
+        hierarchy.push(current);
+        current = ancestors[current.parent!];
+    }
+
+    return hierarchy;
+}
+
+export function resolveModel(root: MinecraftModelJson, ancestors: {[assetPath: string]: MinecraftModelJson}) {
+    const hierarchy = resolveModelHierarchy(root, ancestors)
+
+    // Resolve elements
+    let elements: ElementJson[] = [];
+    for(const model of hierarchy) {
+        if(model.elements != null && model.elements.length >= 1) {
+            elements = model.elements ?? [];
+            break;
+        }
+    }
+
+    // Resolve textures
+    const textures: {[textureVar: string]: string} = {};
+    for(const model of hierarchy.reverse()) {
+        if(model.textures != null) {
+            Object.assign(textures, model.textures);
+        }
+    }
+
+    return {
+        elements: elements,
+        textures: textures,
+    }
+}
