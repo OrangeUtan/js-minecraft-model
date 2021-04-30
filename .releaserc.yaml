@@ -16,9 +16,12 @@ prepare:
       assets: ["CHANGELOG.md"]
 
 publish:
-    - "@semantic-release/npm"
+    - path: "@semantic-release/npm"
+      npmPublish: false
+      tarballDir: dist
     - path: "@semantic-release/github"
-      assets: "*.vsix"
+      assets: ["dist/*.tgz", "*.tgz"]
+    - path: "@semantic-release/npm"
 
 success:
   - "@semantic-release/github"
