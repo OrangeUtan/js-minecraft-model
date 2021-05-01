@@ -1,5 +1,14 @@
 Changelog
 
+# [1.2.0](https://github.com/OrangeUtan/js-minecraft-model/compare/v1.1.0...v1.2.0) (2021-05-01)
+
+
+### Features
+
+* Added '__comment' attribute to elements ([8676e74](https://github.com/OrangeUtan/js-minecraft-model/commit/8676e744b5d43d2991e026c0370b6d0df4629dd3))
+* Added 'name' to elements ([2670428](https://github.com/OrangeUtan/js-minecraft-model/commit/2670428aed013a64d262211a92b21d20a15a3c58))
+* Added support for groups ([4594c10](https://github.com/OrangeUtan/js-minecraft-model/commit/4594c10dd1670a9ed981980f8904871bd3910d30))
+
 # [1.1.0](https://github.com/OrangeUtan/js-minecraft-model/compare/v1.0.2...v1.1.0) (2021-04-30)
 
 
