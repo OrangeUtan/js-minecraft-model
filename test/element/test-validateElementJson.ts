@@ -14,6 +14,7 @@ test('valid', (t) => {
                 axis: 'x',
             },
             shade: true,
+            name: 'A Name',
         }),
     )
 })
@@ -128,6 +129,22 @@ test('"shade" is invalid', (t) => {
         {
             instanceOf: ModelValidationError,
             message: 'Invalid element shade: 2',
+        },
+    )
+})
+
+test('"name" is invalid', (t) => {
+    t.throws(
+        () =>
+            validateElementJson({
+                from: [1, 1, 1],
+                to: [2, 2, 2],
+                faces: {},
+                name: false,
+            }),
+        {
+            instanceOf: ModelValidationError,
+            message: 'Invalid element name: false',
         },
     )
 })

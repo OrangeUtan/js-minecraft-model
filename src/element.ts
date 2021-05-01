@@ -83,6 +83,7 @@ export interface ElementJson {
     faces: { [name in FaceType]: FaceJson }
     rotation?: ElementRotation
     shade?: boolean
+    name?: string
 }
 
 export function validateElementJson(
@@ -128,6 +129,12 @@ export function validateElementJson(
         )
     }
 
+    if (json.name != null && typeof json.name !== 'string') {
+        throw new ModelValidationError(
+            'Invalid element name: ' + JSON.stringify(json.name),
+        )
+    }
+
     return true
 }
 
@@ -138,6 +145,7 @@ export class Element {
         public shade: boolean,
         public faces: { [name in FaceType]?: Face },
         public rotation?: ElementRotation,
+        public name?: string,
     ) {}
 
     static fromJson(json: ElementJson) {
@@ -152,6 +160,7 @@ export class Element {
             json.shade ?? true,
             faces,
             json.rotation ? ElementRotation.fromJson(json.rotation) : undefined,
+            json.name,
         )
     }
 }
