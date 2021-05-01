@@ -1,5 +1,12 @@
 Changelog
 
+# [1.3.0](https://github.com/OrangeUtan/js-minecraft-model/compare/v1.2.0...v1.3.0) (2021-05-01)
+
+
+### Features
+
+* resolveModeJson now resolves all model properties ([0d80dd6](https://github.com/OrangeUtan/js-minecraft-model/commit/0d80dd61cd1209d553eaf1bbfe46000c542112e8))
+
 # [1.2.0](https://github.com/OrangeUtan/js-minecraft-model/compare/v1.1.0...v1.2.0) (2021-05-01)
 
 
