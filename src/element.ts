@@ -84,6 +84,7 @@ export interface ElementJson {
     rotation?: ElementRotation
     shade?: boolean
     name?: string
+    __comment?: string
 }
 
 export function validateElementJson(
@@ -135,6 +136,12 @@ export function validateElementJson(
         )
     }
 
+    if (json.__comment != null && typeof json.__comment !== 'string') {
+        throw new ModelValidationError(
+            'Invalid element comment: ' + JSON.stringify(json.__comment),
+        )
+    }
+
     return true
 }
 
@@ -160,7 +167,7 @@ export class Element {
             json.shade ?? true,
             faces,
             json.rotation ? ElementRotation.fromJson(json.rotation) : undefined,
-            json.name,
+            json.name ?? json.__comment,
         )
     }
 }

@@ -14,7 +14,8 @@ test('valid', (t) => {
                 axis: 'x',
             },
             shade: true,
-            name: 'A Name',
+            name: 'A name',
+            __comment: 'A comment',
         }),
     )
 })
@@ -145,6 +146,22 @@ test('"name" is invalid', (t) => {
         {
             instanceOf: ModelValidationError,
             message: 'Invalid element name: false',
+        },
+    )
+})
+
+test('"__comment" is invalid', (t) => {
+    t.throws(
+        () =>
+            validateElementJson({
+                from: [1, 1, 1],
+                to: [2, 2, 2],
+                faces: {},
+                __comment: false,
+            }),
+        {
+            instanceOf: ModelValidationError,
+            message: 'Invalid element comment: false',
         },
     )
 })
