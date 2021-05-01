@@ -33,7 +33,7 @@ test('invalid type', (t) => {
     }
 })
 
-test('missing "textures"', (t) => {
+test('"textures" is missing', (t) => {
     t.notThrows(() =>
         validateMinecraftModelJson({
             elements: [],
@@ -41,7 +41,7 @@ test('missing "textures"', (t) => {
     )
 })
 
-test('invalid "textures"', (t) => {
+test('"textures" has invalid type', (t) => {
     for (const textures of [20, [], { a: 999 }]) {
         t.throws(
             () =>
@@ -58,7 +58,7 @@ test('invalid "textures"', (t) => {
     }
 })
 
-test('invalid "parent"', (t) => {
+test('"parent" has invalid type', (t) => {
     t.throws(
         () =>
             validateMinecraftModelJson({
@@ -75,7 +75,7 @@ test('invalid "parent"', (t) => {
     )
 })
 
-test('invalid "elements"', (t) => {
+test('"elements" has invalid type', (t) => {
     t.throws(
         () =>
             validateMinecraftModelJson({
@@ -91,7 +91,7 @@ test('invalid "elements"', (t) => {
     )
 })
 
-test('invalid "ambientocclusion"', (t) => {
+test('"ambientocclusion" has invalid type', (t) => {
     t.throws(
         () =>
             validateMinecraftModelJson({
@@ -108,7 +108,7 @@ test('invalid "ambientocclusion"', (t) => {
     )
 })
 
-test('invalid "display"', (t) => {
+test('"display" has invalid type', (t) => {
     for (const display of [20, []]) {
         t.throws(
             () =>
@@ -128,7 +128,7 @@ test('invalid "display"', (t) => {
     }
 })
 
-test('unknown "display" type', (t) => {
+test('"display" has unknown display type', (t) => {
     t.throws(
         () =>
             validateMinecraftModelJson({
@@ -147,4 +147,20 @@ test('unknown "display" type', (t) => {
             message: 'Unknown display type: "down_under"',
         },
     )
+})
+
+test('"groups" has invalid type', (t) => {
+    for (const groups of [false, '', { a: 999 }]) {
+        t.throws(
+            () =>
+                validateMinecraftModelJson({
+                    elements: [],
+                    groups,
+                }),
+            {
+                instanceOf: ModelValidationError,
+                message: 'Invalid property "groups": ' + JSON.stringify(groups),
+            },
+        )
+    }
 })

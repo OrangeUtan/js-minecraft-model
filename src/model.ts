@@ -4,6 +4,45 @@ import { Display, DisplayJson, DisplayPosition } from './display'
 import { Element, ElementJson } from './element'
 import { ModelValidationError } from './error'
 import { isObject } from './utils'
+import { validateVec3, Vec3 } from './vector'
+
+export interface GroupJson {
+    name: string
+    origin: Vec3
+    children: (number | GroupJson)[]
+}
+
+export function validateGroupJson(json: unknown): json is GroupJson | never {
+    if (!isObject(json)) {
+        throw new ModelValidationError('Invalid group: ' + JSON.stringify(json))
+    }
+
+    for (const prop of ['name', 'origin', 'children']) {
+        if (!(prop in json)) {
+            throw new ModelValidationError(
+                `Group is missing property "${prop}"`,
+            )
+        }
+    }
+
+    if (typeof json.name !== 'string') {
+        throw new ModelValidationError(
+            'Invalid group name: ' + JSON.stringify(json.name),
+        )
+    }
+
+    validateVec3(json.origin)
+
+    if (!Array.isArray(json.children)) {
+        throw new ModelValidationError(
+            'Invalid group children: ' + JSON.stringify(json.children),
+        )
+    }
+
+    json.children.forEach((c) => typeof c === 'number' || validateGroupJson(c))
+
+    return true
+}
 
 export interface MinecraftModelJson {
     parent?: string
@@ -11,6 +50,7 @@ export interface MinecraftModelJson {
     elements?: ElementJson[]
     display?: { [name in DisplayPosition]?: DisplayJson }
     ambientocclusion?: boolean
+    groups?: (number | GroupJson)[]
 }
 
 export function validateMinecraftModelJson(
@@ -75,6 +115,18 @@ export function validateMinecraftModelJson(
         )
     }
 
+    if (json.groups != null) {
+        if (!Array.isArray(json.groups)) {
+            throw new ModelValidationError(
+                'Invalid property "groups": ' + JSON.stringify(json.groups),
+            )
+        }
+
+        json.groups.forEach(
+            (c) => typeof c === 'number' || validateGroupJson(c),
+        )
+    }
+
     return true
 }
 
@@ -85,6 +137,7 @@ export class MinecraftModel {
         public textures?: { [textureVar: string]: string },
         public elements?: Element[],
         public display?: { [name in DisplayPosition]?: Display },
+        public groups?: (number | GroupJson)[],
     ) {}
 
     static fromJson(json: MinecraftModelJson) {
@@ -109,6 +162,7 @@ export class MinecraftModel {
             json.textures,
             json.elements?.map((e) => Element.fromJson(e)),
             displayPositions,
+            json.groups,
         )
     }
 
@@ -117,34 +171,40 @@ export class MinecraftModel {
     }
 }
 
-export function resolveModelHierarchy(root: MinecraftModelJson, ancestors: {[assetPath: string]: MinecraftModelJson}) {
-    const hierarchy = [root];
-    let current = ancestors[root.parent!];
-    while(current != null) {
-        hierarchy.push(current);
-        current = ancestors[current.parent!];
+export function resolveModelHierarchy(
+    root: MinecraftModelJson,
+    ancestors: { [assetPath: string]: MinecraftModelJson },
+) {
+    const hierarchy = [root]
+    let current = ancestors[root.parent!]
+    while (current != null) {
+        hierarchy.push(current)
+        current = ancestors[current.parent!]
     }
 
-    return hierarchy;
+    return hierarchy
 }
 
-export function resolveModel(root: MinecraftModelJson, ancestors: {[assetPath: string]: MinecraftModelJson}) {
+export function resolveModel(
+    root: MinecraftModelJson,
+    ancestors: { [assetPath: string]: MinecraftModelJson },
+) {
     const hierarchy = resolveModelHierarchy(root, ancestors)
 
     // Resolve elements
-    let elements: ElementJson[] = [];
-    for(const model of hierarchy) {
-        if(model.elements != null && model.elements.length >= 1) {
-            elements = model.elements ?? [];
-            break;
+    let elements: ElementJson[] = []
+    for (const model of hierarchy) {
+        if (model.elements != null && model.elements.length >= 1) {
+            elements = model.elements ?? []
+            break
         }
     }
 
     // Resolve textures
-    const textures: {[textureVar: string]: string} = {};
-    for(const model of hierarchy.reverse()) {
-        if(model.textures != null) {
-            Object.assign(textures, model.textures);
+    const textures: { [textureVar: string]: string } = {}
+    for (const model of hierarchy.reverse()) {
+        if (model.textures != null) {
+            Object.assign(textures, model.textures)
         }
     }
 
