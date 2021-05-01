@@ -146,14 +146,18 @@ export function validateElementJson(
 }
 
 export class Element {
+    public shade: boolean
+
     constructor(
         public from: Vec3,
         public to: Vec3,
-        public shade: boolean,
         public faces: { [name in FaceType]?: Face },
         public rotation?: ElementRotation,
+        shade?: boolean,
         public name?: string,
-    ) {}
+    ) {
+        this.shade = shade ?? true
+    }
 
     static fromJson(json: ElementJson) {
         const faces: { [name in FaceType]?: Face } = {}
@@ -164,9 +168,9 @@ export class Element {
         return new Element(
             json.from,
             json.to,
-            json.shade ?? true,
             faces,
             json.rotation ? ElementRotation.fromJson(json.rotation) : undefined,
+            json.shade,
             json.name ?? json.__comment,
         )
     }

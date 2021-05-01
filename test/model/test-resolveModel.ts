@@ -1,100 +1,87 @@
 import test from 'ava'
-import { MinecraftModelJson, resolveModel } from '../../src/model'
-import { ElementJson } from '../../src/element'
+import { MinecraftModelJson, resolveModelJson } from '../../src/model'
 
-test('child inherits elements from ancestor', t => {
+test('child inherits elements from ancestor', (t) => {
     const models = {
         child: {
-            parent: "parent"
-        } as MinecraftModelJson,
+            parent: 'parent',
+        },
         parent: {
-            parent: "ancestor",
-        } as MinecraftModelJson,
+            parent: 'ancestor',
+        },
         ancestor: {
-            elements: [{from: [1,1,1], to: [2,2,2], faces: {}}]
-        } as MinecraftModelJson
-    } as {[key: string]: MinecraftModelJson};
-    t.deepEqual(
-        resolveModel(models["child"]!, models),
-        {
-            elements: [{from: [1,1,1], to: [2,2,2], faces: {}}] as ElementJson[],
-            textures: {}
-        }
-    )
+            elements: [{ from: [1, 1, 1], to: [2, 2, 2], faces: {} }],
+        } as MinecraftModelJson,
+    } as { [key: string]: MinecraftModelJson }
+
+    const resolvedModel = resolveModelJson(models['child']!, models)
+    t.deepEqual(resolvedModel.elements, [
+        { from: [1, 1, 1], to: [2, 2, 2], faces: {} },
+    ] as any[])
 })
 
-test('child overwrites elements of ancestor', t => {
+test('child overwrites elements of ancestor', (t) => {
     const models = {
         child: {
-            parent: "parent",
-            elements: [{from: [0,0,0], to: [1,1,1], faces: {}}]
+            parent: 'parent',
+            elements: [{ from: [0, 0, 0], to: [1, 1, 1], faces: {} }],
         } as MinecraftModelJson,
         parent: {
-            parent: "ancestor",
-            elements: [{from: [1,1,1], to: [2,2,2], faces: {}}]
+            parent: 'ancestor',
+            elements: [{ from: [1, 1, 1], to: [2, 2, 2], faces: {} }],
         } as MinecraftModelJson,
         ancestor: {
-            elements: [{from: [2,2,2], to: [3,3,3], faces: {}}]
+            elements: [{ from: [2, 2, 2], to: [3, 3, 3], faces: {} }],
         } as MinecraftModelJson,
-    } as {[key: string]: MinecraftModelJson};
-    t.deepEqual(
-        resolveModel(models["child"]!, models),
-        {
-            elements: [{from: [0,0,0], to: [1,1,1], faces: {}}] as ElementJson[],
-            textures: {}
-        }
-    )
+    } as { [key: string]: MinecraftModelJson }
+
+    const resolvedModel = resolveModelJson(models['child']!, models)
+    t.deepEqual(resolvedModel.elements, [
+        { from: [0, 0, 0], to: [1, 1, 1], faces: {} },
+    ] as any[])
 })
 
-test('child merges textures from ancestors', t => {
+test('child merges textures from ancestors', (t) => {
     const models = {
         child: {
-            parent: "parent",
-            textures: {"tchild": "path-child"}
+            parent: 'parent',
+            textures: { tchild: 'path-child' },
         } as MinecraftModelJson,
         parent: {
-            parent: "ancestor",
-            textures: {"tparent": "path-parent"}
+            parent: 'ancestor',
+            textures: { tparent: 'path-parent' },
         } as MinecraftModelJson,
         ancestor: {
-            textures: {"tancestor": "path-ancestor"}
-        } as MinecraftModelJson
-    } as {[key: string]: MinecraftModelJson};
-    t.deepEqual(
-        resolveModel(models["child"]!, models),
-        {
-            elements: [],
-            textures: {
-                "tchild": "path-child",
-                "tparent": "path-parent",
-                "tancestor": "path-ancestor"
-            }
-        }
-    )
+            textures: { tancestor: 'path-ancestor' },
+        } as MinecraftModelJson,
+    } as { [key: string]: MinecraftModelJson }
+
+    const resolvedModel = resolveModelJson(models['child']!, models)
+    t.deepEqual(resolvedModel.textures, {
+        tchild: 'path-child',
+        tparent: 'path-parent',
+        tancestor: 'path-ancestor',
+    })
 })
 
-test('child overwrites textures from ancestors', t => {
+test('child overwrites textures from ancestors', (t) => {
     const models = {
         child: {
-            parent: "parent",
-            textures: {"tancestor": "path-child"}
+            parent: 'parent',
+            textures: { tancestor: 'path-child' },
         } as MinecraftModelJson,
         parent: {
-            parent: "ancestor",
-            textures: {"tparent": "path-parent"}
+            parent: 'ancestor',
+            textures: { tparent: 'path-parent' },
         } as MinecraftModelJson,
         ancestor: {
-            textures: {"tancestor": "path-ancestor"}
-        } as MinecraftModelJson
-    } as {[key: string]: MinecraftModelJson};
-    t.deepEqual(
-        resolveModel(models["child"]!, models),
-        {
-            elements: [],
-            textures: {
-                "tparent": "path-parent",
-                "tancestor": "path-child"
-            }
-        }
-    )
+            textures: { tancestor: 'path-ancestor' },
+        } as MinecraftModelJson,
+    } as { [key: string]: MinecraftModelJson }
+
+    const resolvedModel = resolveModelJson(models['child']!, models)
+    t.deepEqual(resolvedModel.textures, {
+        tparent: 'path-parent',
+        tancestor: 'path-child',
+    })
 })

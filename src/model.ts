@@ -131,14 +131,18 @@ export function validateMinecraftModelJson(
 }
 
 export class MinecraftModel {
+    public ambientocclusion: boolean
+
     constructor(
-        public ambientocclusion: boolean,
+        public elements: Element[],
+        public textures: { [textureVar: string]: string },
         public parent?: string,
-        public textures?: { [textureVar: string]: string },
-        public elements?: Element[],
         public display?: { [name in DisplayPosition]?: Display },
         public groups?: (number | GroupJson)[],
-    ) {}
+        ambientocclusion?: boolean,
+    ) {
+        this.ambientocclusion = ambientocclusion ?? true
+    }
 
     static fromJson(json: MinecraftModelJson) {
         let displayPositions:
@@ -157,12 +161,12 @@ export class MinecraftModel {
         }
 
         return new MinecraftModel(
-            json.ambientocclusion ?? true,
+            json.elements?.map((e) => Element.fromJson(e)) ?? [],
+            json.textures ?? {},
             json.parent,
-            json.textures,
-            json.elements?.map((e) => Element.fromJson(e)),
             displayPositions,
             json.groups,
+            json.ambientocclusion,
         )
     }
 
@@ -185,23 +189,43 @@ export function resolveModelHierarchy(
     return hierarchy
 }
 
-export function resolveModel(
+export function resolveModelJson(
     root: MinecraftModelJson,
     ancestors: { [assetPath: string]: MinecraftModelJson },
 ) {
     const hierarchy = resolveModelHierarchy(root, ancestors)
 
-    // Resolve elements
-    let elements: ElementJson[] = []
+    // Properties to resolve
+    let elements: ElementJson[] | undefined
+    let ambientocclusion: boolean | undefined
+    let display: { [name in DisplayPosition]?: DisplayJson } | undefined
+    let groups: (number | GroupJson)[] | undefined
+    const textures: { [textureVar: string]: string } = {}
+
+    // Resolve top -> down
     for (const model of hierarchy) {
-        if (model.elements != null && model.elements.length >= 1) {
+        if (
+            elements == null &&
+            model.elements != null &&
+            model.elements.length >= 1
+        ) {
             elements = model.elements ?? []
-            break
+        }
+
+        if (ambientocclusion == null && model.ambientocclusion != null) {
+            ambientocclusion = model.ambientocclusion
+        }
+
+        if (display == null && model.display) {
+            display = model.display
+        }
+
+        if (groups == null && model.groups) {
+            groups = model.groups
         }
     }
 
-    // Resolve textures
-    const textures: { [textureVar: string]: string } = {}
+    // Resolve bottom -> up
     for (const model of hierarchy.reverse()) {
         if (model.textures != null) {
             Object.assign(textures, model.textures)
@@ -209,7 +233,10 @@ export function resolveModel(
     }
 
     return {
-        elements: elements,
-        textures: textures,
-    }
+        textures,
+        elements,
+        display,
+        groups,
+        ambientocclusion,
+    } as MinecraftModelJson
 }
