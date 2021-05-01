@@ -1,5 +1,12 @@
 Changelog
 
+# [1.1.0](https://github.com/OrangeUtan/js-minecraft-model/compare/v1.0.2...v1.1.0) (2021-04-30)
+
+
+### Features
+
+* Added functions to resolve models from inheritance ([c600a7a](https://github.com/OrangeUtan/js-minecraft-model/commit/c600a7aa37a884ef91c3f5d5f020279043f46ce1))
+
 ## [1.0.2](https://github.com/OrangeUtan/js-minecraft-model/compare/v1.0.1...v1.0.2) (2021-04-27)
 
 
